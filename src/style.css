@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+@theme {
+  /* Light Mode Palette: Colonial Canvas & Terracotta */
+  --color-colonial-cream: #F8F6F0;
+  --color-pure-white: #FFFFFF;
+  --color-charcoal-slate: #1E293B;
+  --color-dutch-navy: #1E3A8A;
+  --color-terracotta: #C55A3A;
+
+  /* Dark Mode Palette: Midnight Ocean & Antique Brass */
+  --color-midnight-slate: #0F172A;
+  --color-deep-charcoal: #1E293B;
+  --color-starlight-gray: #E2E8F0;
+  --color-antique-brass: #EAB308;
+  --color-muted-terracotta: #D97757;
+}
+
+/* Base styles to apply background and text colors automatically based on theme */
+@layer base {
+  body {
+    @apply bg-colonial-cream text-charcoal-slate dark:bg-midnight-slate dark:text-starlight-gray transition-colors duration-300;
+  }
+}
