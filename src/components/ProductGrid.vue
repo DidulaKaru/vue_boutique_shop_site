@@ -1,57 +1,54 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import FilterBar from './FilterBar.vue';
 import ProductCard from './ProductCard.vue';
+import type { DummyJSONProductsResponse, Product } from '../types/product';
 
-// 1. Strict TypeScript Interfaces
-// We define the exact shape of the data we expect from DummyJSON.
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  discountPercentage?: number;
-  rating: number;
-  thumbnail: string;
-  category: string;
-}
-
-interface DummyJSONResponse {
-  products: Product[];
-  total: number;
-  skip: number;
-  limit: number;
-}
-
-// 2. Reactive Component State
-// We need to track the products, but also whether the app is currently loading or if an error occurred.
+// 1. Reactive State
 const products = ref<Product[]>([]);
 const isLoading = ref<boolean>(true);
 const errorMessage = ref<string | null>(null);
+const selectedCategory = ref<string>('all');
+
+// 2. Derived State
+const categories = computed<string[]>(() => {
+  const uniqueCategories = new Set(products.value.map((product) => product.category));
+  return ['all', ...Array.from(uniqueCategories)];
+});
+
+const filteredProducts = computed<Product[]>(() => {
+  if (selectedCategory.value === 'all') {
+    return products.value;
+  }
+
+  return products.value.filter((product) => product.category === selectedCategory.value);
+});
+
+const handleCategorySelect = (category: string): void => {
+  selectedCategory.value = category;
+};
 
 // 3. Asynchronous Fetch Logic
 const fetchProducts = async () => {
   try {
-    // We use the native fetch API as requested by the rubric
     const response = await fetch('https://dummyjson.com/products?limit=12');
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    // Explicitly cast the JSON response to our strict interface
-    const data: DummyJSONResponse = await response.json();
+    const data: DummyJSONProductsResponse = await response.json();
     products.value = data.products;
     
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'Failed to fetch products.';
-    console.error("Error fetching products:", error);
+    console.error("Fetch error:", error);
   } finally {
-    // Whether it succeeds or fails, we are done loading
     isLoading.value = false;
   }
 };
 
 // 4. Lifecycle Hook
-// Trigger the fetch as soon as this component is mounted to the screen
 onMounted(() => {
   fetchProducts();
 });
@@ -76,12 +73,24 @@ onMounted(() => {
       <p>{{ errorMessage }}</p>
     </div>
 
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <template v-else>
+      <FilterBar
+        :categories="categories"
+        :selected-category="selectedCategory"
+        @select="handleCategorySelect"
+      />
+
+      <div v-if="filteredProducts.length === 0" class="text-center py-12 text-text-light dark:text-text-dark">
+        <p class="text-lg font-medium">No products found in this category.</p>
+      </div>
+
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <ProductCard 
-        v-for="product in products" 
+        v-for="product in filteredProducts" 
         :key="product.id" 
         :product="product" 
       />
-    </div>
+      </div>
+    </template>
   </div>
 </template>

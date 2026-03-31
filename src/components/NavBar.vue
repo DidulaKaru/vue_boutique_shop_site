@@ -30,7 +30,7 @@ onMounted(() => {
         
         <div class="flex-shrink-0 flex items-center">
           <a href="#" class="text-3xl font-serif italic tracking-wider">
-            <span class="text-brand-peach text-4xl">B</span>outique
+            <span class="text-brand-peach text-4xl">Flying</span> Dutchman
           </a>
         </div>
 

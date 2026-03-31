@@ -6,7 +6,7 @@ defineProps<{
 }>();
 
 // 2. Define the exact events this component can emit
-defineEmits<{
+const emit = defineEmits<{
   (e: 'select', category: string): void;
 }>();
 </script>
@@ -16,7 +16,7 @@ defineEmits<{
     <button
       v-for="category in categories"
       :key="category"
-      @click="$emit('select', category)"
+      @click="emit('select', category)"
       class="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 border capitalize"
       :class="[
         selectedCategory === category 

@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import type { Product } from '../types/product';
 
-// 1. Strict TypeScript Interface
-// This ensures no "any" types are used and the component knows exactly what data to expect.
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  discountPercentage?: number;
-  rating: number;
-  thumbnail: string;
-}
+const router = useRouter();
 
 // 2. Define Component Props
 const props = defineProps<{
@@ -29,10 +22,21 @@ const currentPrice = computed(() => props.product.price.toFixed(2));
 
 // Round the rating to the nearest whole number to display the correct number of filled stars
 const roundedRating = computed(() => Math.round(props.product.rating));
+
+const goToProductDetail = (): void => {
+  router.push(`/product/${props.product.id}`);
+};
 </script>
 
 <template>
-  <div class="relative flex flex-col bg-surface-light dark:bg-surface-card-dark border border-border-light dark:border-border-dark rounded-lg p-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+  <div
+    class="relative flex flex-col bg-surface-light dark:bg-surface-card-dark border border-border-light dark:border-border-dark rounded-lg p-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+    role="button"
+    tabindex="0"
+    @click="goToProductDetail"
+    @keyup.enter="goToProductDetail"
+    @keyup.space.prevent="goToProductDetail"
+  >
     
     <div 
       v-if="product.discountPercentage" 

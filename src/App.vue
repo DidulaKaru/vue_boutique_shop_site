@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue';
-import ProductGrid from './components/ProductGrid.vue';
 </script>
 
 <template>
@@ -8,7 +7,7 @@ import ProductGrid from './components/ProductGrid.vue';
     <NavBar />
     
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <ProductGrid />
+      <router-view />
     </main>
   </div>
 </template>
