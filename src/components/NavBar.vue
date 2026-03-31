@@ -1,22 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 
-// State to track if dark mode is active
 const isDarkMode = ref(false);
 
-// Function to toggle dark mode
 const toggleTheme = () => {
   isDarkMode.value = !isDarkMode.value;
   if (isDarkMode.value) {
     document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark'); // Save preference
+    localStorage.setItem('theme', 'dark');
   } else {
     document.documentElement.classList.remove('dark');
     localStorage.setItem('theme', 'light');
   }
 };
 
-// Check for saved user preference on load
 onMounted(() => {
   if (localStorage.getItem('theme') === 'dark' || 
       (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -27,30 +24,60 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="bg-pure-white dark:bg-deep-charcoal shadow-md sticky top-0 z-50 transition-colors duration-300">
+  <header class="bg-brand-maroon dark:bg-surface-card-dark text-white transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16 items-center">
+      <div class="flex justify-between items-center h-20">
+        
         <div class="flex-shrink-0 flex items-center">
-          <h1 class="text-2xl font-bold text-dutch-navy dark:text-antique-brass font-serif tracking-wide">
-            The Flying Dutchman
-          </h1>
+          <a href="#" class="text-3xl font-serif italic tracking-wider">
+            <span class="text-brand-peach text-4xl">B</span>outique
+          </a>
         </div>
 
-        <div class="flex items-center space-x-4">
-          <button 
-            @click="toggleTheme" 
-            class="p-2 rounded-full hover:bg-colonial-cream dark:hover:bg-midnight-slate transition-colors"
-            aria-label="Toggle Dark Mode"
-          >
-            <svg v-if="!isDarkMode" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-terracotta">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-2.25l-1.591-1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-antique-brass">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-            </svg>
+        <nav class="hidden md:flex space-x-8 text-sm font-medium">
+          <a href="#" class="hover:text-brand-peach transition-colors">Home</a>
+          <a href="#" class="hover:text-brand-peach transition-colors flex items-center">
+            Moon River
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <a href="#" class="hover:text-brand-peach transition-colors flex items-center">
+            La-di-da
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <a href="#" class="hover:text-brand-peach transition-colors flex items-center">
+            Lila
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <a href="#" class="hover:text-brand-peach transition-colors">Contact us</a>
+        </nav>
+
+        <div class="flex items-center space-x-5 text-sm">
+          <button class="hover:text-brand-peach transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </button>
+          
+          <button class="hover:text-brand-peach transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          </button>
+
+          <button class="hover:text-brand-peach transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+          </button>
+
+          <div class="flex items-center space-x-2 cursor-pointer hover:text-brand-peach transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <span>$0.00</span>
+          </div>
+
+          <div class="w-px h-6 bg-white/30"></div>
+
+          <button @click="toggleTheme" class="hover:text-brand-peach transition-colors">
+            <svg v-if="isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
           </button>
         </div>
+
       </div>
     </div>
-  </nav>
+  </header>
 </template>
