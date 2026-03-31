@@ -4,7 +4,7 @@ import ProductDetailView from '../views/ProductDetailView.vue';
 import CustomRequestsView from '../views/CustomRequestsView.vue';
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
