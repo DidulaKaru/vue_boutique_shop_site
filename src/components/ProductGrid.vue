@@ -26,19 +26,30 @@ const handleCategorySelect = (category: string): void => {
 	selectedCategory.value = category;
 };
 
+const curatedCategories = new Set<string>([
+	'home-decoration',
+	'womens-dresses',
+	'womens-bags',
+	'womens-jewellery',
+	'mens-shirts',
+	'sunglasses',
+	'fragrances',
+]);
+
 const fetchProducts = async (): Promise<void> => {
 	try {
 		isLoading.value = true;
 		error.value = null;
 
-		const response = await fetch('https://dummyjson.com/products?limit=30');
+		const response = await fetch('https://dummyjson.com/products?limit=100');
 
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
 		const data: DummyJSONProductsResponse = await response.json();
-		products.value = data.products;
+		const curatedProducts = data.products.filter((product) => curatedCategories.has(product.category));
+		products.value = curatedProducts;
 	} catch (caughtError) {
 		error.value = caughtError instanceof Error ? caughtError.message : 'Failed to fetch products.';
 	} finally {

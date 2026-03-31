@@ -42,7 +42,7 @@ onMounted(() => {
         <nav class="hidden md:flex space-x-8 text-sm font-medium">
           <RouterLink to="/" class="hover:text-brand-peach transition-colors">Home</RouterLink>
           <RouterLink to="/" class="hover:text-brand-peach transition-colors">Shop</RouterLink>
-          <a href="#" class="hover:text-brand-peach transition-colors">Custom Requests</a>
+          <RouterLink to="/requests" class="hover:text-brand-peach transition-colors">Custom Requests</RouterLink>
         </nav>
 
         <div class="flex items-center space-x-5 text-sm">

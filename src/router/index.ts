@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import ProductDetailView from '../views/ProductDetailView.vue';
+import CustomRequestsView from '../views/CustomRequestsView.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/product/:id',
       name: 'product-detail',
       component: ProductDetailView,
+    },
+    {
+      path: '/requests',
+      name: 'custom-requests',
+      component: CustomRequestsView,
     },
   ],
 });
