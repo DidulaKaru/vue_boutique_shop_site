@@ -51,11 +51,11 @@ const goToProductDetail = (): void => {
       New
     </div>
 
-    <div class="w-full h-48 mb-4 overflow-hidden flex items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-md">
+    <div class="w-full h-48 mb-4 overflow-hidden flex items-center justify-center bg-white p-4 rounded-md">
       <img 
         :src="product.thumbnail" 
         :alt="product.title" 
-        class="object-contain w-full h-full mix-blend-multiply dark:mix-blend-normal"
+        class="object-contain w-full h-full"
         loading="lazy"
       />
     </div>

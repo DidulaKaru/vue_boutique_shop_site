@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useCartStore } from '../stores/cart';
 import type { Product } from '../types/product';
 
 const route = useRoute();
+const cartStore = useCartStore();
 
 const product = ref<Product | null>(null);
 const isLoading = ref<boolean>(true);
-const errorMessage = ref<string | null>(null);
+const error = ref<string | null>(null);
 
 const productImage = computed<string>(() => {
   if (!product.value) {
@@ -34,19 +36,27 @@ const currentPrice = computed<string>(() => {
   return product.value.price.toFixed(2);
 });
 
+const addToCart = (): void => {
+  if (!product.value) {
+    return;
+  }
+
+  cartStore.addItem(product.value);
+};
+
 const fetchProductById = async (): Promise<void> => {
   const rawId = route.params.id;
   const id = Number(rawId);
 
   if (!Number.isInteger(id) || id <= 0) {
-    errorMessage.value = 'Invalid product id.';
+    error.value = 'Invalid product id.';
     isLoading.value = false;
     return;
   }
 
   try {
     isLoading.value = true;
-    errorMessage.value = null;
+    error.value = null;
 
     const response = await fetch(`https://dummyjson.com/products/${id}`);
 
@@ -56,16 +66,20 @@ const fetchProductById = async (): Promise<void> => {
 
     const data: Product = await response.json();
     product.value = data;
-  } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'Failed to fetch product details.';
+  } catch (caughtError) {
+    error.value = caughtError instanceof Error ? caughtError.message : 'Failed to fetch product details.';
   } finally {
     isLoading.value = false;
   }
 };
 
-onMounted(() => {
-  fetchProductById();
-});
+watch(
+  () => route.params.id,
+  () => {
+    fetchProductById();
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -74,16 +88,16 @@ onMounted(() => {
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-maroon dark:border-brand-peach"></div>
     </div>
 
-    <div v-else-if="errorMessage" class="text-center py-20 text-red-600 dark:text-red-400">
+    <div v-else-if="error" class="text-center py-20 text-red-600 dark:text-red-400">
       <p class="text-xl font-bold">Could not load product details.</p>
-      <p>{{ errorMessage }}</p>
+      <p>{{ error }}</p>
     </div>
 
     <article
       v-else-if="product"
       class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start bg-surface-light dark:bg-surface-card-dark border border-border-light dark:border-border-dark rounded-2xl p-6 lg:p-10"
     >
-      <div class="w-full bg-gray-50 dark:bg-gray-800 rounded-xl p-6 flex items-center justify-center min-h-[320px] lg:min-h-[460px]">
+      <div class="w-full bg-white p-8 rounded-lg flex items-center justify-center min-h-[320px] lg:min-h-[460px]">
         <img
           :src="productImage"
           :alt="product.title"
@@ -126,6 +140,14 @@ onMounted(() => {
         <p class="text-base leading-relaxed text-text-light dark:text-text-dark mt-2">
           {{ product.description }}
         </p>
+
+        <button
+          type="button"
+          @click="addToCart"
+          class="mt-4 inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-semibold bg-brand-maroon hover:bg-brand-peach transition-colors duration-300 w-full sm:w-auto"
+        >
+          Add to Cart
+        </button>
       </div>
     </article>
   </section>
