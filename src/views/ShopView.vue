@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import HeroBanner from '../components/HeroBanner.vue';
 import ProductGrid from '../components/ProductGrid.vue';
 </script>
 
 <template>
-  <HeroBanner />
   <section class="pt-8 md:pt-12">
     <ProductGrid />
   </section>
